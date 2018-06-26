@@ -54,11 +54,16 @@ class Compiler {
     const nativeInput = {
       language: "Solidity",
       sources,
-      // settings: {
-      //   optimizer: {
-      //     enabled: optimize
-      //   }
-      // }
+      settings: {
+        optimizer: {
+          enabled: optimize
+        },
+        outputSelection: {
+          "*": {
+            "*": ["abi", "evm.bytecode"]
+          }
+        }
+      }
     };
     const nativeInputStr = JSON.stringify(nativeInput);
     // console.log(`NATIVE INPUT: `, nativeInputStr);
