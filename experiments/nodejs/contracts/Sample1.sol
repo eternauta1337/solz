@@ -6,5 +6,5 @@ contract Sample {
     
   }
 
-  function () {}
+  // function () {}
 }

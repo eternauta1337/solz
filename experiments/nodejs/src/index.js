@@ -31,19 +31,21 @@ async function compile() {
   const compiler = new Compiler();
   logger.log('COMPILING...');
   const output = await compiler.compile(input, OPTIMIZE);
+  // console.log(`OUTPUT: `, output);
 
   if(output.errors)
     logger.logErrors(output.errors);
 
   if(output.contracts) {
-    logger.log('WRITTING...');
     const writer = new Writer();
     writer.writeFiles(OUTPUT_DIRECTORY, output.contracts);
+    logger.log('FILES WRITTEN');
   }
 }
 
 function watch() {
   watcher.watchTree(SOURCES_DIRECTORY, (item, curr, prev) => {
+    logger.log('CHANGES DETECTED...');
     compile();
     // if (typeof f == 'object' && prev === null && curr === null) {
     //   console.log('Finished walking the tree');
