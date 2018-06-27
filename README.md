@@ -1,6 +1,8 @@
 # solwatch
 Watch and build Solidity files.
 
+![Solwatch gif](../assets/peek_solwatch.gif)
+
 ## Experiments
 
 ### nodejs
