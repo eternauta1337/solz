@@ -18,19 +18,22 @@ async function exec() {
 exec();
 
 async function read() {
-
   const reader = new Reader();
   return await reader.readFiles(SOURCES_DIRECTORY);
 }
 
 async function compile() {
 
-  const input = await read();
+  const sources = await read();
+  // console.log(`SOURCES: `, sources);
+
+  const options = {
+    optimize: OPTIMIZE
+  };
 
   const compiler = new Compiler();
   logger.log('COMPILING...');
-  const output = await compiler.compile(input, OPTIMIZE);
-  // console.log(`OUTPUT: `, JSON.stringify(output, null, 2) );
+  const output = await compiler.compile(sources, options);
 
   if(output.errors)
     logger.logErrors(output.errors);
@@ -43,7 +46,10 @@ async function compile() {
 }
 
 function watch() {
-  watcher.watchTree(SOURCES_DIRECTORY, (item, curr, prev) => {
+  const watchOptions = {
+    interval: 1 
+  };
+  watcher.watchTree(SOURCES_DIRECTORY, watchOptions, () => {
     logger.log('<<< CHANGES DETECTED >>>');
     compile();
   });

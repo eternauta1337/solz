@@ -8,55 +8,65 @@ const {
 
 class Compiler {
 
-  compile(input, optimize) {
+  compile(sources, options) {
     return new Promise(async resolve => {
-
       if(USE_NATIVE_SOLC) {
-        resolve(this.compileWithSolcNative(input, optimize));
+        commandExists('solc', (err, exists) => {
+          if(err || !exists) resolve(this.compileWithSolcjs(sources, options));
+          else resolve(this.compileWithSolcNative(sources, options));
+        });
       }
       else {
-        resolve(this.compileWithSolcjs(input, optimize));
+        resolve(this.compileWithSolcjs(sources, options));
       }
-
-      // TODO: Consider checking if the command exists first
-      // but avoid check if USE_NATIVE_SOLC is disabled
-      // commandExists('solc', (err, exists) => {
-      //   if(err || !exists) resolve(this.compileWithSolcjs(input, optimize));
-      //   else resolve(this.compileWithSolcNative(input, optimize));
-      // });
-
-      // Force solcjs for now...
-      // resolve(await this.compileWithSolcjs(input, optimize));
     });
   }
 
-  compileWithSolcjs(input, optimize) {
-    // console.log(`JS INPUT: `, input);
+  compileWithSolcjs(sources, options) {
     return new Promise(resolve => {
       const output = solc.compile(
-        {sources: input},
-        optimize
+        {sources: sources},
+        options.optimize
       );
       resolve(output);
     });
   }
 
-  compileWithSolcNative(input, optimize) {
+  compileWithSolcNative(sources, options) {
+    return new Promise(resolve => {
+      const cmd = `echo '${this.prepareJsonForNativeSolc(sources, options)}' | solc --standard-json --allow-paths ${SOURCES_DIRECTORY}`;
+      exec(cmd, (err, stdout, stderr) => {
+        if(err) console.log(err);
+        const output = JSON.parse(stdout);
+        output.errors = this.parseNativeSolcErrorsOutput(output.errors);
+        resolve(output);
+      });
+    });
+  }
 
-    // Native solc JSON input needs to be more detailed.
-    const sources = {};
-    for(let contractKey in input) {
-      const contractContent = input[contractKey];
-      sources[contractKey] = {
+  parseNativeSolcErrorsOutput(errors) {
+    if(!errors || errors.length == 0) return errors;
+    const newErrors = [];
+    for(let i = 0; i < errors.length; i++) {
+      newErrors.push(errors[i].formattedMessage);
+    }
+    return newErrors;
+  }
+
+  prepareJsonForNativeSolc(sources, options) {
+    const newSources = {};
+    for(let contractKey in sources) {
+      const contractContent = sources[contractKey];
+      newSources[contractKey] = {
         content: contractContent
       };
     }
-    const nativeInput = {
+    const nativeSources = {
       language: "Solidity",
-      sources,
+      sources: newSources,
       settings: {
-        optimizer: {
-          enabled: optimize
+        optmizer: {
+          enabled: options.optimize
         },
         outputSelection: {
           "*": {
@@ -65,16 +75,7 @@ class Compiler {
         }
       }
     };
-    const nativeInputStr = JSON.stringify(nativeInput);
-    // console.log(`NATIVE INPUT: `, nativeInputStr);
-
-    return new Promise(resolve => {
-      const cmd = `echo '${nativeInputStr}' | solc --standard-json --allow-paths ${SOURCES_DIRECTORY}`;
-      exec(cmd, (err, stdout, stderr) => {
-        const output = JSON.parse(stdout);
-        resolve(output);
-      });
-    });
+    return JSON.stringify(nativeSources);
   }
 }
 

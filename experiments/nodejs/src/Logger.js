@@ -1,3 +1,5 @@
+const colors = require('colors');
+
 class Logger {
 
   logErrors(errors) {
@@ -9,11 +11,16 @@ class Logger {
   }
 
   logError(err) {
-    console.error(err);
+    if(err.includes('Error'))
+      console.log(colors.red(err));
+    else if(err.includes('Warning'))
+      console.log(colors.yellow(err));
+    else 
+      console.log(colors.white(err));
   }
 
   log(msg) {
-    console.log(msg);
+    console.log(colors.blue(msg));
   }
 }
 
