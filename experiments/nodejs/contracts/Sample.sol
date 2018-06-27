@@ -2,9 +2,11 @@ pragma solidity ^0.4.24;
 
 contract Sample {
   
-  function constructor() public {}
+  constructor() public {}
 
-  function sayHello() public returns (string) {
+  function sayHello() public pure returns (string) {
     return "Hello friend.";
   }
+
+  function() external payable {}
 }

@@ -37,6 +37,8 @@ async function compile() {
 
   if(output.errors)
     logger.logErrors(output.errors);
+  else 
+    logger.log(`0 errors or warnings`);
 
   if(output.contracts) {
     const writer = new Writer();
@@ -50,7 +52,7 @@ function watch() {
     interval: 1 
   };
   watcher.watchTree(SOURCES_DIRECTORY, watchOptions, () => {
-    logger.log('<<< CHANGES DETECTED >>>');
+    logger.logInfo('<<< CHANGES DETECTED >>>');
     compile();
   });
 }

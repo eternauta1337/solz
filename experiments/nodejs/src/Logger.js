@@ -20,6 +20,10 @@ class Logger {
   }
 
   log(msg) {
+    console.log(colors.white(msg));
+  }
+
+  logInfo(msg) {
     console.log(colors.blue(msg));
   }
 }
