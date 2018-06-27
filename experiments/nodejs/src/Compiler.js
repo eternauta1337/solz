@@ -34,7 +34,7 @@ class Compiler {
 
   compileWithSolcNative(sources, options) {
     return new Promise(resolve => {
-      const cmd = `echo '${this.prepareJsonForNativeSolc(sources, options)}' | solc --standard-json --allow-paths ${SOURCES_DIRECTORY}`;
+      const cmd = `echo '${this.prepareJsonForNativeSolc(sources, options)}' | solc --standard-json`;
       exec(cmd, (err, stdout, stderr) => {
         if(err) console.log(err);
         const output = JSON.parse(stdout);
@@ -58,7 +58,7 @@ class Compiler {
     for(let contractKey in sources) {
       const contractContent = sources[contractKey];
       newSources[contractKey] = {
-        content: contractContent
+        content: contractContent.replace(/'/g, '"')
       };
     }
     const nativeSources = {
@@ -75,7 +75,8 @@ class Compiler {
         }
       }
     };
-    return JSON.stringify(nativeSources);
+    const nativeSourcesStr = JSON.stringify(nativeSources);
+    return nativeSourcesStr;
   }
 }
 
