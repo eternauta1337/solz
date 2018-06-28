@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 class Writer {
   
@@ -16,7 +17,7 @@ class Writer {
   }
 
   getContractName(contractKey) {
-    return contractKey.split('.')[0];
+    return path.parse(contractKey).name;
   }
 }
 

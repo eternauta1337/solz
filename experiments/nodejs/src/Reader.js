@@ -1,25 +1,22 @@
-const read = require('read-dir-files');
-const _ = require('lodash');
+const readfiles = require('node-readfiles');
 
 class Reader {
 
   readFiles(dirpath) {
     return new Promise((resolve, reject) => {
-      read.read(dirpath, 'utf8', (err, files) => {
+      const sources = {};
+      const readOptions = {
+        filter: '*/*.sol',
+      };
+      readfiles(dirpath, readOptions, (err, filename, content) => {
         if(err) reject(err);
-        else resolve(this.solidityFilesOnly(files));
+        else {
+          sources[filename] = content;
+        }
+      }).then(() => {
+        resolve(sources);
       });
     });
-  }
-
-  solidityFilesOnly(files) {
-    return _.pickBy(files, (content, filename) => {
-      return this.isSolidityFile(filename);
-    });
-  }
-
-  isSolidityFile(filename) {
-    return filename.split('.').pop() === 'sol';
   }
 }
 
