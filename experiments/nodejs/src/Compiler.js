@@ -1,8 +1,7 @@
 const solc = require('solc');
-const { exec } = require('child_process');
+const child_process = require('child_process');
 const commandExists = require('command-exists');
 const { 
-  SOURCES_DIRECTORY,
   USE_NATIVE_SOLC,
 } = require('./constants');
 
@@ -34,13 +33,14 @@ class Compiler {
 
   compileWithSolcNative(sources, options) {
     return new Promise(resolve => {
-      const cmd = `echo '${this.prepareJsonForNativeSolc(sources, options)}' | solc --standard-json`;
-      exec(cmd, (err, stdout, stderr) => {
-        if(err) console.log(err);
-        const output = JSON.parse(stdout);
+      const child = child_process.spawn('solc', ['--standard-json']);
+      child.stdin.write(`${this.prepareJsonForNativeSolc(sources, options)}`);
+      child.stdout.on('data', data => {
+        const output = JSON.parse(data);
         output.errors = this.parseNativeSolcErrorsOutput(output.errors);
         resolve(output);
       });
+      child.stdin.end();
     });
   }
 
@@ -58,7 +58,7 @@ class Compiler {
     for(let contractKey in sources) {
       const contractContent = sources[contractKey];
       newSources[contractKey] = {
-        content: contractContent.replace(/'/g, '"')
+        content: contractContent
       };
     }
     const nativeSources = {

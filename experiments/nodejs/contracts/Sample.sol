@@ -5,7 +5,7 @@ contract Sample {
   constructor() public {}
 
   function sayHello() public pure returns (string) {
-    return "Hello friend.";
+    return "Hello 'friend'.";
   }
 
   function() external payable {}
