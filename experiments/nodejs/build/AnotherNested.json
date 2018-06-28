@@ -1,0 +1,20 @@
+{
+  "AnotherNested": {
+    "abi": [
+      {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      }
+    ],
+    "evm": {
+      "bytecode": {
+        "linkReferences": {},
+        "object": "6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a72305820d6fc96686c8580313743399f60b7064d8ed4f655483d045b605fe3fc52640cc30029",
+        "opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH1 0xF JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x35 DUP1 PUSH1 0x1D PUSH1 0x0 CODECOPY PUSH1 0x0 RETURN STOP PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x0 DUP1 REVERT STOP LOG1 PUSH6 0x627A7A723058 KECCAK256 0xd6 0xfc SWAP7 PUSH9 0x6C8580313743399F60 0xb7 MOD 0x4d DUP15 0xd4 0xf6 SSTORE 0x48 RETURNDATASIZE DIV JUMPDEST PUSH1 0x5F 0xe3 0xfc MSTORE PUSH5 0xCC3002900 ",
+        "sourceMap": "26:52:3:-;;;53:23;8:9:-1;5:2;;;30:1;27;20:12;5:2;53:23:3;26:52;;;;;;"
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@ class Reader {
     return new Promise((resolve, reject) => {
       const sources = {};
       const readOptions = {
-        filter: '*/*.sol',
+        filter: '**/*.sol',
       };
       readfiles(dirpath, readOptions, (err, filename, content) => {
         if(err) reject(err);

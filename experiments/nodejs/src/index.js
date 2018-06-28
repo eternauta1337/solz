@@ -35,10 +35,11 @@ async function compile() {
   logger.log('COMPILING...');
   const output = await compiler.compile(sources, options);
 
-  if(output.errors)
+  const numErrs = output.errors ? output.errors.length : 0;
+  if(numErrs)
     logger.logErrors(output.errors);
-  else 
-    logger.log(`0 errors or warnings`);
+  logger.log(`${numErrs} errors/warnings found.`);
+  logger.log(`${Object.keys(sources).length} sources compiled.`);
 
   if(output.contracts) {
     const writer = new Writer();
