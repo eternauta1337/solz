@@ -4,13 +4,16 @@ const Writer = require('./Writer');
 const Logger = require('./Logger');
 const Compiler = require('./Compiler');
 
-const { 
-  SOURCES_DIRECTORY,
-  OUTPUT_DIRECTORY,
-  OPTIMIZE
-} = require('./constants');
-
 const logger = new Logger();
+
+// TODO: these need to be CLI arguments
+const options = {
+  optimize: false,
+  useNative: true,
+  outputDirectory: './build',
+  sourcesDirectory: './contracts'
+};
+
 
 async function exec() {
   watch();
@@ -19,17 +22,13 @@ exec();
 
 async function read() {
   const reader = new Reader();
-  return await reader.readFiles(SOURCES_DIRECTORY);
+  return await reader.readFiles(options.sourcesDirectory);
 }
 
 async function compile() {
 
   const sources = await read();
   // console.log(`SOURCES: `, sources);
-
-  const options = {
-    optimize: OPTIMIZE
-  };
 
   const compiler = new Compiler();
   logger.log('COMPILING...');
@@ -43,7 +42,7 @@ async function compile() {
 
   if(output.contracts) {
     const writer = new Writer();
-    writer.writeFiles(OUTPUT_DIRECTORY, output.contracts);
+    writer.writeFiles(options.outputDirectory, output.contracts);
     logger.log('DONE');
   }
 }
@@ -52,7 +51,7 @@ function watch() {
   const watchOptions = {
     interval: 1 
   };
-  watcher.watchTree(SOURCES_DIRECTORY, watchOptions, () => {
+  watcher.watchTree(options.sourcesDirectory, watchOptions, () => {
     logger.logInfo('<<< CHANGES DETECTED >>>');
     compile();
   });

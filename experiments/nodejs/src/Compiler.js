@@ -1,15 +1,12 @@
 const solc = require('solc');
 const child_process = require('child_process');
 const commandExists = require('command-exists');
-const { 
-  USE_NATIVE_SOLC,
-} = require('./constants');
 
 class Compiler {
 
   compile(sources, options) {
     return new Promise(async resolve => {
-      if(USE_NATIVE_SOLC) {
+      if(options.useNative) {
         commandExists('solc', (err, exists) => {
           if(err || !exists) resolve(this.compileWithSolcjs(sources, options));
           else resolve(this.compileWithSolcNative(sources, options));
