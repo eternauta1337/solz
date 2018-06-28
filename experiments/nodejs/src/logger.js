@@ -1,6 +1,6 @@
 const colors = require('colors');
 
-class Logger {
+const logger = {
 
   logErrors(errors) {
     if(errors.length == 0) return;
@@ -8,7 +8,7 @@ class Logger {
       const err = errors[i];
       this.logError(err);
     }
-  }
+  },
 
   logError(err) {
     if(err.includes('Error'))
@@ -17,15 +17,15 @@ class Logger {
       console.log(colors.yellow(err));
     else 
       console.log(colors.white(err));
-  }
+  },
 
   log(msg) {
     console.log(colors.white(msg));
-  }
+  },
 
   logInfo(msg) {
     console.log(colors.blue(msg));
   }
-}
+};
 
-module.exports = Logger;
+module.exports = logger;

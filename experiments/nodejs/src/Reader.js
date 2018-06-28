@@ -1,4 +1,5 @@
 const readfiles = require('node-readfiles');
+const logger = require('./logger');
 
 class Reader {
 
@@ -14,6 +15,7 @@ class Reader {
           sources[filename] = content;
         }
       }).then(() => {
+        logger.log(`reading ${Object.keys(sources).length} source files.`);
         resolve(sources);
       });
     });

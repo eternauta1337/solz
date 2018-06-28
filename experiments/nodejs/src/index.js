@@ -1,10 +1,8 @@
 const watcher = require('watch');
 const Reader = require('./Reader');
 const Writer = require('./Writer');
-const Logger = require('./Logger');
 const Compiler = require('./Compiler');
-
-const logger = new Logger();
+const logger = require('./logger');
 
 // TODO: these need to be CLI arguments
 const options = {
@@ -13,7 +11,6 @@ const options = {
   outputDirectory: './build',
   sourcesDirectory: './contracts'
 };
-
 
 async function exec() {
   watch();
@@ -28,7 +25,6 @@ async function read() {
 async function compile() {
 
   const sources = await read();
-  // console.log(`SOURCES: `, sources);
 
   const compiler = new Compiler();
   logger.log('COMPILING...');
