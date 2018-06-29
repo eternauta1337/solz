@@ -1,15 +1,15 @@
 const watcher = require('watch');
-const Reader = require('./Reader');
-const Writer = require('./Writer');
-const Compiler = require('./Compiler');
-const logger = require('./logger');
+const Reader = require('./io/Reader');
+const Writer = require('./io/Writer');
+const Compiler = require('./compile/Compiler');
+const logger = require('./utils/logger');
 
 // TODO: these need to be CLI arguments
 const options = {
   optimize: false,
   useNative: true,
-  outputDirectory: './build',
-  sourcesDirectory: './contracts'
+  outputDirectory: './test/build',
+  sourcesDirectory: './test/contracts'
 };
 
 async function exec() {
