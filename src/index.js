@@ -6,43 +6,36 @@ const Writer = require('./io/Writer');
 const Compiler = require('./compile/Compiler');
 const logger = require('./utils/logger');
 
-// Default options.
-const options = {
-  optimize: false,
-  useNative: true,
-  outputDirectory: './test/build',
-  sourcesDirectory: './test/contracts'
-};
-
 // Commander config.
 const program = require('commander');
 program
   .name('solwatch')
   .version('0.0.1')
-  .description('solc/solcjs wrapper for compiling solidity files');
-program
-  .command('watch <input> <output>')
   .usage('<input> <output> [options]')
-  .description('Watches an input directory with solidity files and compiles them to an output directory.')
+  .description('solc/solcjs wrapper for compiling/watching solidity files')
   .option('-o, --optimize', 'optimize opcodes')
-  .action((input, output, opts) => {
-    options.sourcesDirectory = input;
-    options.outputDirectory = output;
-    options.optimize = opts.optimize;
-    watch();
-  });
-// TODO
-// program
-//   .command('compile')
-//   .action(() => compile());
+  .option('-w, --watch', 'watch changes');
 program.parse(process.argv);
+
+// Prepare options.
+const options = {
+  optimize: program.optimize,
+  watch: program.watch,
+  useNative: true,
+  outputDirectory: './test/build',
+  sourcesDirectory: './test/contracts'
+};
+
+// Exec.
+if(options.watch) watch();
+else compile();
 
 function watch() {
   const watchOptions = {
     interval: 1 
   };
   watcher.watchTree(options.sourcesDirectory, watchOptions, () => {
-    logger.logInfo(`<<< CHANGES DETECTED >>> opts: ${ JSON.stringify(options, null, 2) }`);
+    logger.logInfo(`<<< CHANGES DETECTED >>>`);
     compile();
   });
 }
