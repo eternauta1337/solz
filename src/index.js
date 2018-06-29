@@ -23,8 +23,8 @@ const options = {
   optimize: program.optimize,
   watch: program.watch,
   useNative: true,
-  outputDirectory: './test/build',
-  sourcesDirectory: './test/contracts'
+  outputDirectory: program.output,
+  sourcesDirectory: program.input 
 };
 
 // Exec.
