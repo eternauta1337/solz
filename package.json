@@ -1,13 +1,13 @@
 {
-  "name": "nodejs",
-  "version": "1.0.0",
-  "description": "",
+  "name": "solcompile",
+  "version": "0.0.1",
+  "author": "Alejandro Santander <palebluedot@gmail.com", 
+  "description": "solc/solc-js wrapper for compiling/watching directories with solidity files",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["solidity", "compile", "watch"],
   "license": "ISC",
   "dependencies": {
     "colors": "^1.3.0",

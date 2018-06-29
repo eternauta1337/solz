@@ -5,14 +5,15 @@ const Reader = require('./io/Reader');
 const Writer = require('./io/Writer');
 const Compiler = require('./compile/Compiler');
 const logger = require('./utils/logger');
+const pkg = require('../package.json');
 
 // Commander config.
 const program = require('commander');
 program
-  .name('solwatch')
-  .version('0.0.1')
+  .name('solcompile')
+  .version(pkg.version)
   .usage('<input> <output> [options]')
-  .description('solc/solcjs wrapper for compiling/watching solidity files')
+  .description('solc/solc-js wrapper for compiling/watching directories with solidity files')
   .option('-o, --optimize', 'optimize opcodes')
   .option('-w, --watch', 'watch changes');
 program.parse(process.argv);
