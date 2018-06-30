@@ -7,7 +7,7 @@ const Compiler = require('./compile/Compiler');
 const logger = require('./utils/logger');
 const pkg = require('../package.json');
 
-// Commander config.
+// Commander input.
 const program = require('commander');
 program
   .name('solcompile')
@@ -16,13 +16,15 @@ program
   .description('solc/solc-js wrapper for compiling/watching directories with solidity files')
   .option('-o, --optimize', 'optimize opcodes')
   .option('-w, --watch', 'watch changes')
+  .option('-j, --js', 'always use solc-js')
   .parse(process.argv);
 
 // Prepare options.
+console.log(`PROGRAM: `, program);
 const options = {
   optimize: program.optimize || false,
   watch: program.watch || false,
-  useNative: true,
+  useNative: !program.js,
   sourcesDirectory: program.input || './contracts',
   outputDirectory: program.output || './build'
 };
