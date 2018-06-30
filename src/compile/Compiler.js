@@ -30,7 +30,7 @@ class Compiler {
 
   compileWithSolcNative(sources, options) {
     return new Promise(resolve => {
-      const child = child_process.spawn('solc', ['--standard-json']);
+      const child = child_process.spawn('solc', ['--standard-json', '--allow-path', './node_modules']);
       child.stdin.write(`${this.prepareJsonForNativeSolc(sources, options)}`);
       child.stdout.on('data', data => {
         const output = JSON.parse(data);
