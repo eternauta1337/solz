@@ -15,17 +15,18 @@ program
   .usage('<input> <output> [options]')
   .description('solc/solc-js wrapper for compiling/watching directories with solidity files')
   .option('-o, --optimize', 'optimize opcodes')
-  .option('-w, --watch', 'watch changes');
-program.parse(process.argv);
+  .option('-w, --watch', 'watch changes')
+  .parse(process.argv);
 
 // Prepare options.
 const options = {
-  optimize: program.optimize,
-  watch: program.watch,
+  optimize: program.optimize || false,
+  watch: program.watch || false,
   useNative: true,
-  outputDirectory: program.output,
-  sourcesDirectory: program.input 
+  sourcesDirectory: program.input || './contracts',
+  outputDirectory: program.output || './build'
 };
+console.log(`OPTIONS: `, options);
 
 // Exec.
 if(options.watch) watch();
