@@ -1,4 +1,4 @@
-# solidity-compiler
+# solz
 
 [solc](https://github.com/ethereum/solidity)/[solc-js](https://github.com/ethereum/solc-js) wrapper for compiling/watching directories with solidity files.
 
