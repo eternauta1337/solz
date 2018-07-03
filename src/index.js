@@ -20,13 +20,17 @@ program
   .option('-r, --remappings <remappings>', 'include directory remappings')
   .parse(process.argv);
 
+const defaultRemappings = [
+  'zeppelin-solidity=./node_modules/zeppelin-solidity'
+];
+
 // Prepare options.
 // console.log(`PROGRAM: `, program);
 const options = {
   optimize: !!program.optimize,
   watch: !!program.watch,
   useNative: !program.js,
-  remappings: program.remappings.split(','),
+  remappings: program.remappings ? program.remappings.split(',') : defaultRemappings,
   sourcesDirectory: program.input || './contracts',
   outputDirectory: program.output || './build'
 };

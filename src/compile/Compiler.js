@@ -76,7 +76,7 @@ class Compiler {
       language: "Solidity",
       sources: newSources,
       settings: {
-        remappings: options.remappings || [],
+        remappings: options.remappings,
         optmizer: {
           enabled: options.optimize
         },
