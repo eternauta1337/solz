@@ -40,16 +40,25 @@ class Compiler {
       // console.log(`json: `, json);
       const child = child_process.spawn(cmd, opts);
       child.stdin.write(`${json}`);
+      let output = "";
+      let errors = [];
       child.stdout.on('data', data => {
-        const output = JSON.parse(data);
-        output.errors = this.parseNativeSolcErrorsOutput(output.errors);
-        resolve(output);
+        const dataStr = data.toString('utf8');
+        output = output + dataStr;
       });
       child.stderr.on('data', data => {
-        const output = {
-          errors: [data.toString('utf8')]
-        };
-        resolve(output);
+        errors.push(data.toString('utf8'));
+      });
+      child.on('close', code => {
+        if(code === 0) {
+          const jsonOutput = JSON.parse(output);
+          jsonOutput.errors = this.parseNativeSolcErrorsOutput(jsonOutput.errors);
+          resolve(jsonOutput);
+        }
+        else {
+          const jsonOutput = { errors };
+          resolve(jsonOutput);
+        }
       });
       child.stdin.end();
     });
