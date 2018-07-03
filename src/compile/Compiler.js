@@ -30,11 +30,25 @@ class Compiler {
 
   compileWithSolcNative(sources, options) {
     return new Promise(resolve => {
-      const child = child_process.spawn('solc', ['--standard-json', '--allow-path', './node_modules']);
-      child.stdin.write(`${this.prepareJsonForNativeSolc(sources, options)}`);
+      const cmd = 'solc';
+      const opts = [
+        '--standard-json',
+        '--allow-paths',
+        '.'
+      ];
+      const json = this.prepareJsonForNativeSolc(sources, options);
+      // console.log(`json: `, json);
+      const child = child_process.spawn(cmd, opts);
+      child.stdin.write(`${json}`);
       child.stdout.on('data', data => {
         const output = JSON.parse(data);
         output.errors = this.parseNativeSolcErrorsOutput(output.errors);
+        resolve(output);
+      });
+      child.stderr.on('data', data => {
+        const output = {
+          errors: [data.toString('utf8')]
+        };
         resolve(output);
       });
       child.stdin.end();
@@ -62,6 +76,7 @@ class Compiler {
       language: "Solidity",
       sources: newSources,
       settings: {
+        remappings: options.remappings || [],
         optmizer: {
           enabled: options.optimize
         },

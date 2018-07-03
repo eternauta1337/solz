@@ -17,14 +17,16 @@ program
   .option('-o, --optimize', 'optimize opcodes')
   .option('-w, --watch', 'watch changes')
   .option('-j, --js', 'always use solc-js')
+  .option('-r, --remappings <remappings>', 'include directory remappings')
   .parse(process.argv);
 
 // Prepare options.
-console.log(`PROGRAM: `, program);
+// console.log(`PROGRAM: `, program);
 const options = {
-  optimize: program.optimize || false,
-  watch: program.watch || false,
+  optimize: !!program.optimize,
+  watch: !!program.watch,
   useNative: !program.js,
+  remappings: program.remappings.split(','),
   sourcesDirectory: program.input || './contracts',
   outputDirectory: program.output || './build'
 };
