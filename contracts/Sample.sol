@@ -1,6 +1,8 @@
 pragma solidity ^0.4.24;
 
-contract Sample {
+import "zeppelin-solidity/contracts/ownership/Ownable.sol";
+
+contract Sample is Ownable {
   
   constructor() public {}
 
