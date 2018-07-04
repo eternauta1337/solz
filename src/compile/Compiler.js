@@ -91,7 +91,7 @@ class Compiler {
         },
         outputSelection: {
           "*": {
-            "*": ["abi", "evm.bytecode"]
+            "*": ["abi", "ast", "evm.bytecode", "evm.deployedBytecode"]
           }
         }
       }
