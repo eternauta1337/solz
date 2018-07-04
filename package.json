@@ -1,6 +1,6 @@
 {
-  "name": "solcompile",
-  "version": "0.0.7",
+  "name": "solz",
+  "version": "0.0.1",
   "author": "Alejandro Santander <palebluedot@gmail.com",
   "description": "solc/solc-js wrapper for compiling/watching directories with solidity files",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "solcompile": "./src/index.js"
+    "solz": "./src/index.js"
   },
   "keywords": [
     "solidity",
