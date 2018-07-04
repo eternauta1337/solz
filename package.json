@@ -1,6 +1,6 @@
 {
   "name": "solz",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Alejandro Santander <palebluedot@gmail.com",
   "description": "solc/solc-js wrapper for compiling/watching directories with solidity files",
   "main": "index.js",
