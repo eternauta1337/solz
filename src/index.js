@@ -34,7 +34,7 @@ const options = {
   sourcesDirectory: program.input || './contracts',
   outputDirectory: program.output || './build'
 };
-console.log(`OPTIONS: `, options);
+// console.log(`OPTIONS: `, options);
 
 // Exec.
 if(options.watch) watch();

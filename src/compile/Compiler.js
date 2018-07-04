@@ -1,6 +1,9 @@
 const solc = require('solc');
 const child_process = require('child_process');
 const commandExists = require('command-exists');
+const JSONWrapper = require('./JSONWrapper');
+
+const wrapper = new JSONWrapper();
 
 class Compiler {
 
@@ -19,16 +22,16 @@ class Compiler {
   }
 
   compileWithSolcjs(sources, options) {
+    console.log(`compiling with solc-js`);
     return new Promise(resolve => {
-      const output = solc.compile(
-        {sources: sources},
-        options.optimize
-      );
+      const json = wrapper.buildStandardJSONInput(sources, options);
+      const output = solc.compileStandardWrapper(json);
       resolve(output);
     });
   }
 
   compileWithSolcNative(sources, options) {
+    console.log(`compiling with solc (native)`);
     return new Promise(resolve => {
       const cmd = 'solc';
       const opts = [
@@ -36,7 +39,7 @@ class Compiler {
         '--allow-paths',
         '.'
       ];
-      const json = this.prepareJsonForNativeSolc(sources, options);
+      const json = wrapper.buildStandardJSONInput(sources, options);
       // console.log(`json: `, json);
       const child = child_process.spawn(cmd, opts);
       child.stdin.write(`${json}`);
@@ -52,7 +55,7 @@ class Compiler {
       child.on('close', code => {
         if(code === 0) {
           const jsonOutput = JSON.parse(output);
-          jsonOutput.errors = this.parseNativeSolcErrorsOutput(jsonOutput.errors);
+          jsonOutput.errors = wrapper.parseStandardJSONOutputErrors(jsonOutput.errors);
           resolve(jsonOutput);
         }
         else {
@@ -62,42 +65,6 @@ class Compiler {
       });
       child.stdin.end();
     });
-  }
-
-  parseNativeSolcErrorsOutput(errors) {
-    if(!errors || errors.length == 0) return errors;
-    const newErrors = [];
-    for(let i = 0; i < errors.length; i++) {
-      newErrors.push(errors[i].formattedMessage);
-    }
-    return newErrors;
-  }
-
-  prepareJsonForNativeSolc(sources, options) {
-    const newSources = {};
-    for(let contractKey in sources) {
-      const contractContent = sources[contractKey];
-      newSources[contractKey] = {
-        content: contractContent
-      };
-    }
-    const nativeSources = {
-      language: "Solidity",
-      sources: newSources,
-      settings: {
-        remappings: options.remappings,
-        optmizer: {
-          enabled: options.optimize
-        },
-        outputSelection: {
-          "*": {
-            "*": ["abi", "ast", "evm.bytecode", "evm.deployedBytecode"]
-          }
-        }
-      }
-    };
-    const nativeSourcesStr = JSON.stringify(nativeSources);
-    return nativeSourcesStr;
   }
 }
 
