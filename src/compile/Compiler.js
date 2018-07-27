@@ -45,13 +45,16 @@ class Compiler {
       child.stdin.write(`${json}`);
       let output = "";
       let errors = [];
+
       child.stdout.on('data', data => {
         const dataStr = data.toString('utf8');
         output = output + dataStr;
       });
+
       child.stderr.on('data', data => {
         errors.push(data.toString('utf8'));
       });
+
       child.on('close', code => {
         if(code === 0) {
           const jsonOutput = JSON.parse(output);
